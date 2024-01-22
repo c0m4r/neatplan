@@ -1,0 +1,12 @@
+#!/sbin/openrc-run
+
+: ${config:="/etc/neatplan/default.conf"}
+
+depend() {
+    provide net dns
+}
+
+start() {
+    /etc/neatplan/neatplan/neatplan.py --config "$config"
+    sleep 5
+}
