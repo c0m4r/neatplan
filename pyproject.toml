@@ -23,4 +23,4 @@ neatplan = "neatplan:main"
 
 [project.urls]
 Homepage = "https://github.com/c0m4r/neatplan"
-Issues = "https://github.com/c0m4r/neatplan"
+Issues = "https://github.com/c0m4r/neatplan/issues"
