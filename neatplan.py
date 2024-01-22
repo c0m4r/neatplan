@@ -135,7 +135,7 @@ def iface_up(iface: str) -> None:
     Bring the interface up
     """
     run([which_ip(), "link", "set", iface, "up"], check=True)
-    with open("/run/neatplan", "w+", encoding="utf-8") as neatplan_run:
+    with open("/run/neatplan", "a+", encoding="utf-8") as neatplan_run:
         neatplan_run.write(f"{iface}\n")
 
 
@@ -272,6 +272,9 @@ def main() -> None:
 
     # Check init system
     check_init_system()
+
+    # Set lookpback device up
+    iface_up("lo")
 
     # Parse config
     for cfg in config_json["config"][0]["parsed"]:
