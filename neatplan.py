@@ -119,6 +119,14 @@ def which_ip() -> str:
         return ip_cmd
 
 
+def iface_up(iface: str) -> None:
+    """
+    Bring the interface up
+    """
+    run([which_ip(), "link", "set", iface, "up"], check=False)
+    run(["/sbin/ifup", iface], check=False)
+
+
 def set_ip(ip: str, iface: str) -> None:
     """
     Set IP
@@ -211,7 +219,7 @@ def parse_network_configuration(cfg: Whatever) -> None:
             ethernet = net["block"]
             for eth in ethernet:
                 iface = eth["directive"]
-                print(iface)
+                iface_up(iface)
                 for ethconf in eth["block"]:
                     if ethconf["directive"] == "addresses":
                         parse_addresses(ethconf["block"], iface)
