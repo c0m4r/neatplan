@@ -15,7 +15,7 @@ depend() {
 }
 
 start() {
-    /etc/neatplan/neatplan/neatplan.py --config "$config"
+    /opt/neatplan/neatplan.py --config "$config"
     eindent
     ifaces=$(cat /run/neatplan)
     for iface in $ifaces ; do
