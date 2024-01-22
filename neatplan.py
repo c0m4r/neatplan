@@ -150,44 +150,78 @@ def set_ip(ip: str, iface: str) -> None:
         run([which_ip(), "address", "add", ip, "dev", iface], check=False)
 
 
-def set_route(route: str, default: bool, iface: str) -> None:
+def set_route(route: str, iface: str) -> None:
     """
     Set route
     """
-    if is_ipv6(route):
-        run([which_ip(), "-6", "route", "add", route, "dev", iface], check=False)
-        if default:
-            run(
-                [
-                    which_ip(),
-                    "-6",
-                    "route",
-                    "add",
-                    "default",
-                    "via",
-                    route,
-                    "dev",
-                    iface,
-                ],
-                check=False,
-            )
+    default_command = []
+    default6_command = []
+    via_command = []
+    via6_command = []
 
-    if is_ipv4(route):
-        run([which_ip(), "route", "add", route, "dev", iface], check=False)
-        if default:
-            run(
-                [
-                    which_ip(),
-                    "route",
-                    "add",
-                    "default",
-                    "via",
-                    route,
-                    "dev",
-                    iface,
-                ],
-                check=False,
-            )
+    if "default" in route:
+        print("default")
+        default_command = [
+            which_ip(),
+            "-6",
+            "route",
+            "add",
+            "default",
+            "via",
+            route[0],
+            "dev",
+            iface,
+        ]
+        default6_command = [
+            which_ip(),
+            "-6",
+            "route",
+            "add",
+            "default",
+            "via",
+            route[0],
+            "dev",
+            iface,
+        ]
+    elif "via" in route:
+        print("via")
+        via_command = [
+            which_ip(),
+            "route",
+            "add",
+            route[0],
+            "via",
+            route[2],
+            "dev",
+            iface,
+        ]
+        via6_command = [
+            which_ip(),
+            "-6",
+            "route",
+            "add",
+            "default",
+            "via",
+            route,
+            "dev",
+            iface,
+        ]
+
+    if is_ipv6(route[0]):
+        if default6_command:
+            run(default6_command, check=False)
+        elif via6_command:
+            run(via6_command, check=False)
+        else:
+            run([which_ip(), "-6", "route", "add", route[0], "dev", iface], check=False)
+
+    if is_ipv4(route[0]):
+        if default_command:
+            run(default_command, check=False)
+        if via_command:
+            run(via_command, check=False)
+        else:
+            run([which_ip(), "route", "add", route[0], "dev", iface], check=False)
 
 
 def parse_addresses(addresses: Whatever, iface: str) -> None:
@@ -203,10 +237,7 @@ def parse_routes(routes: Whatever, iface: str) -> None:
     Parse routes
     """
     for route in routes:
-        if route["args"][1] == "default":
-            set_route(route["args"][0], True, iface)
-        else:
-            set_route(route["args"][0], False, iface)
+        set_route(route["args"], iface)
 
 
 def parse_nameservers(nameservers: Whatever) -> None:
