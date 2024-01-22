@@ -264,8 +264,6 @@ def main() -> None:
     if args.version:
         sys.exit(0)
 
-    run(["/sbin/ifup", "lo"], check=False)
-
     # Read config
     config_json = crossplane.parse(args.config)
 
