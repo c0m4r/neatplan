@@ -8,7 +8,10 @@ nginx-style network configuration
 
 ## Dependencies
 
-Python >= 3.6 | iproute2 | [crossplane](https://github.com/nginxinc/crossplane)
+* Python >= 3.6
+* [crossplane](https://github.com/nginxinc/crossplane)
+* iproute2
+* OpenRC
 
 ## Features
 
