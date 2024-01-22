@@ -22,6 +22,7 @@ import ipaddress
 import json
 import sys
 
+from shutil import which
 from subprocess import run
 from typing import Any as Whatever
 
@@ -63,8 +64,11 @@ def is_ip(ip: str) -> bool:
     """
     IP validation
     """
-    if ipaddress.ip_address(ip):
-        return True
+    try:
+        if ipaddress.ip_address(ip):
+            return True
+    except ValueError:
+        return False
     return False
 
 
@@ -72,8 +76,11 @@ def is_ipv4(ip: str) -> bool:
     """
     IPv4 validation
     """
-    if ipaddress.IPv4Interface(ip):
-        return True
+    try:
+        if ipaddress.IPv4Interface(ip):
+            return True
+    except ValueError:
+        return False
     return False
 
 
@@ -81,9 +88,24 @@ def is_ipv6(ip: str) -> bool:
     """
     IPv6 validation
     """
-    if ipaddress.IPv6Interface(ip):
-        return True
+    try:
+        if ipaddress.IPv6Interface(ip):
+            return True
+    except ValueError:
+        return False
     return False
+
+
+def which_ip() -> str:
+    """
+    Find ip command path
+    """
+    ip_cmd = which("ip")
+    if not ip_cmd:
+        print("ip command not found")
+        sys.exit(1)
+    else:
+        return ip_cmd
 
 
 def set_ip(ip: str, iface: str) -> None:
@@ -91,7 +113,10 @@ def set_ip(ip: str, iface: str) -> None:
     Set IP
     """
     if is_ipv6(ip):
-        run(["ip", "-6", "address", "add", ip, "dev", iface], check=True)
+        run([which_ip(), "-6", "address", "add", ip, "dev", iface], check=False)
+
+    if is_ipv4(ip):
+        run([which_ip(), "address", "add", ip, "dev", iface], check=False)
 
 
 def set_route(route: str, default: bool, iface: str) -> None:
@@ -99,12 +124,29 @@ def set_route(route: str, default: bool, iface: str) -> None:
     Set route
     """
     if is_ipv6(route):
-        run(["ip", "-6", "route", "add", route, "dev", iface], check=True)
+        run([which_ip(), "-6", "route", "add", route, "dev", iface], check=False)
         if default:
             run(
                 [
-                    "ip",
+                    which_ip(),
                     "-6",
+                    "route",
+                    "add",
+                    "default",
+                    "via",
+                    route,
+                    "dev",
+                    iface,
+                ],
+                check=False,
+            )
+
+    if is_ipv4(route):
+        run([which_ip(), "route", "add", route, "dev", iface], check=False)
+        if default:
+            run(
+                [
+                    which_ip(),
                     "route",
                     "add",
                     "default",
