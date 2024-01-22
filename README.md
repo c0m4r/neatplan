@@ -11,7 +11,6 @@ nginx-style network configuration
 * Python >= 3.6
 * [crossplane](https://github.com/nginxinc/crossplane)
 * iproute2
-* OpenRC
 
 ## Features
 
@@ -28,7 +27,7 @@ So far:
 
 ### Alpine Linux
 
-```
+```bash
 cd /opt
 git clone https://github.com/c0m4r/neatplan.git
 cd neatplan
