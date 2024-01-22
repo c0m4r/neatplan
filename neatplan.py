@@ -161,7 +161,6 @@ def set_route(route: str, iface: str) -> None:
     via6_command = []
 
     if "default" in route:
-        print("default")
         default_command = [
             which_ip(),
             "-6",
@@ -185,7 +184,6 @@ def set_route(route: str, iface: str) -> None:
             iface,
         ]
     elif "via" in route:
-        print("via")
         via_command = [
             which_ip(),
             "route",
