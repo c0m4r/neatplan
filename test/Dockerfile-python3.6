@@ -1,7 +1,7 @@
 FROM python:3.6.3-alpine3.7
 RUN apk update && apk add build-base gcc linux-headers python3-dev
-COPY ./neatplan.py /neatplan.py
-COPY ./requirements.txt /requirements.txt
-COPY ./etc/neatplan/ /etc/neatplan
+COPY ../neatplan.py /neatplan.py
+COPY ../requirements.txt /requirements.txt
+COPY ../etc/neatplan/ /etc/neatplan
 RUN pip install -r /requirements.txt
 CMD [ /neatplan.py ]
