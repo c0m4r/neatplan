@@ -280,8 +280,6 @@ def main() -> None:
         if cfg["directive"] == "network":
             parse_network_configuration(cfg["block"])
 
-    print(psutil.net_if_addrs().items())
-
 
 if __name__ == "__main__":
     main()
