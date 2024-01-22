@@ -25,6 +25,8 @@ So far:
 - Set default IP route for a given interface (`ip ro add default via <ip> dev <iface>`)
 - Set via IP route for a given interface (`ip ro add <ip> via <ip> dev <iface>`)
 - Set nameservers (/etc/resolv.conf)
+- Firewall configuration (`iptables-restore`, `ip6tables-restore`)
+- Custom commands to run before and after
 - Configured interfaces are being stored in /run/neatplan
 
 ## Installation
@@ -48,6 +50,13 @@ Sample config: `/etc/neatplan/default.conf`
 ```nginx
 network {
     backend iproute2;
+    before {
+        command "touch /tmp/neatplan";
+    }
+    firewall {
+        iptables /etc/iptables/iptables.rules;
+        ip6tables /etc/iptables/ip6tables.rules;
+    }
     ethernet {
         eth0 {
             addresses {
@@ -66,6 +75,10 @@ network {
     dns {
         nameserver 2606:4700:4700::1111;
         nameserver 2606:4700:4700::1001;
+    }
+    after {
+        command "echo I\'m so custom, wow";
+        command "ip link add link eth0 name eth0.1337 type vlan id 1337";
     }
 }
 ```
