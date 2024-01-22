@@ -20,6 +20,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import argparse
 import ipaddress
 import json
+import os
 import sys
 
 from shutil import which
@@ -269,6 +270,7 @@ def parse_network_configuration(cfg: Whatever) -> None:
                     if ethconf["directive"] == "routes":
                         parse_routes(ethconf["block"], iface)
         if net["directive"] == "dns":
+            os.remove("/etc/resolv.conf")
             parse_nameservers(net["block"])
 
 
@@ -276,7 +278,7 @@ def set_ns(nameserver: str) -> None:
     """
     Set nameserver
     """
-    with open("/etc/resolv.conf", "w+", encoding="utf-8") as resolv_conf:
+    with open("/etc/resolv.conf", "a+", encoding="utf-8") as resolv_conf:
         if is_ip(nameserver):
             print("nameserver", nameserver)
             resolv_conf.write(f"nameserver {nameserver}\n")
