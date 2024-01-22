@@ -1,2 +1,5 @@
-.okrutnik_venv
+.okrutnik_venv/
+.venv/
+dist/
+neatplan.egg-info/
 okrutnik.sh
