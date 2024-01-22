@@ -1,12 +1,35 @@
 #!/sbin/openrc-run
 
+# neatplan by c0m4r
+# https://github.com/c0m4r/neatplan
+# Licnse: GPLv3
+
 : ${config:="/etc/neatplan/default.conf"}
 
 depend() {
-    provide net dns
+    need localmount hostname
+    want dev-settle
+    after bootmisc hwdrivers modules
+    provide net
+    keyword -jail -prefix -vserver -docker
 }
 
 start() {
     /etc/neatplan/neatplan/neatplan.py --config "$config"
-    sleep 5
+    eindent
+    ifaces=$(cat /run/neatplan)
+    for iface in $ifaces ; do
+    tentatives=$(/sbin/ip -6 a s $iface | grep tentative)
+    iters=1
+    until [ ! "$tentatives" ] ; do
+        sleep 0.1
+        tentatives=$(/sbin/ip -6 a s $iface | grep tentative)
+        iters=$(( iters + 1 ))
+        if [ $iters -gt 30 ]; then
+            tentatives=""
+            break
+        fi
+    done
+    done
+    eoutdent
 }

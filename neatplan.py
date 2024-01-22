@@ -123,8 +123,9 @@ def iface_up(iface: str) -> None:
     """
     Bring the interface up
     """
-    run([which_ip(), "link", "set", iface, "up"], check=False)
-    run(["/sbin/ifup", iface], check=False)
+    run([which_ip(), "link", "set", iface, "up"], check=True)
+    with open("/run/neatplan", "w+", encoding="utf-8") as neatplan_run:
+        neatplan_run.write(f"{iface}\n")
 
 
 def set_ip(ip: str, iface: str) -> None:
@@ -251,6 +252,8 @@ def main() -> None:
 
     if args.version:
         sys.exit(0)
+
+    run(["/sbin/ifup", "lo"], check=False)
 
     # Read config
     config_json = crossplane.parse(args.config)

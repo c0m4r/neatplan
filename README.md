@@ -6,7 +6,29 @@ nginx-style network configuration
 
 Python >= 3.6 | iproute2 | [crossplane](https://github.com/nginxinc/crossplane)
 
-## Usage
+## Features
+
+So far:
+
+- Set link up (`ip link set <iface> up`)
+- Set IP address for a given interface (`ip addr add <ip/mask> dev <iface>`)
+- Set default IP route for a given interface (`ip ro add default via <ip> dev <iface>`)
+- Set nameservers (/etc/resolv.conf)
+
+## Installation
+
+### Alpine Linux
+
+```
+cd /opt
+git clone https://github.com/c0m4r/neatplan.git
+cp etc/init.d/neatplan /etc/init.d/
+cp -r etc/neatplan /etc/
+rc-update del networking boot
+rc-update add neatplan boot
+```
+
+## Configuration
 
 Sample config: `/etc/neatplan/default.conf`
 
