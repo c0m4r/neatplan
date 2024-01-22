@@ -31,6 +31,12 @@ So far:
 
 ## Installation
 
+### pypi
+
+```
+pip install neatplan
+```
+
 ### Alpine Linux
 
 ```bash
