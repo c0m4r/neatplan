@@ -28,6 +28,7 @@ from typing import Any as Whatever
 
 # https://github.com/nginxinc/crossplane
 import crossplane
+import psutil
 
 
 __VERSION = "0.0.1"
@@ -58,6 +59,16 @@ def read_args() -> argparse.Namespace:
     )
 
     return parser.parse_args()
+
+
+def check_init_system() -> None:
+    """
+    pest control
+    """
+    init_name = psutil.Process(1).name()
+    if init_name == "systemd":
+        print("systemd detected, this program will self-destruct now")
+        sys.exit(1)
 
 
 def check_errors(config: Whatever) -> None:
@@ -261,10 +272,15 @@ def main() -> None:
     # Check for errors
     check_errors(config_json)
 
+    # Check init system
+    check_init_system()
+
     # Parse config
     for cfg in config_json["config"][0]["parsed"]:
         if cfg["directive"] == "network":
             parse_network_configuration(cfg["block"])
+
+    print(psutil.net_if_addrs().items())
 
 
 if __name__ == "__main__":
