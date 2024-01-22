@@ -17,11 +17,15 @@ nginx-style network configuration
 So far:
 
 - Boot-time configuration only
+- IPv4/IPv6 autodetection (`ip` or `ip -6` prefix)
+- Set loopback interface up by default (`ip link set lo up`)
 - Set link up (`ip link set <iface> up`)
 - Set IP address for a given interface (`ip addr add <ip/mask> dev <iface>`)
 - Set IP route for a given interface (`ip ro add <ip> dev <iface>`)
 - Set default IP route for a given interface (`ip ro add default via <ip> dev <iface>`)
+- Set via IP route for a given interface (`ip ro add <ip> via <ip> dev <iface>`)
 - Set nameservers (/etc/resolv.conf)
+- Configured interfaces are being stored in /run/neatplan
 
 ## Installation
 
@@ -49,9 +53,13 @@ network {
             addresses {
                 address fe80:ffff:eeee:dddd::1/64;
                 address fe80:ffff:eeee:dddd::2/64;
+                address 192.168.0.10;
+                address 192.168.100.50/24;
             }
             routes {
                 route fe80::1 default;
+                route 192.168.0.1;
+                route 1.1.1.1 via 192.168.0.1;
             }
         }
     }
