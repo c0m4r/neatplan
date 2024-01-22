@@ -30,13 +30,17 @@ from typing import Any as Whatever
 import crossplane
 
 
+__VERSION = "0.0.1"
+
+
 def read_args() -> argparse.Namespace:
     """
     Parse arguments
     """
     parser = argparse.ArgumentParser(
-        description="neatplan - nginx-like network configuration",
-        formatter_class=argparse.RawDescriptionHelpFormatter,
+        prog="neatplan",
+        description="nginx-style network configuration",
+        epilog="https://github.com/c0m4r/neatplan",
     )
 
     parser.add_argument(
@@ -44,6 +48,13 @@ def read_args() -> argparse.Namespace:
         "--config",
         help="Config file absolute path",
         default="/etc/neatplan/default.conf",
+    )
+    parser.add_argument(
+        "-v",
+        "--version",
+        help="Show version and exit",
+        action="store_true",
+        default=False,
     )
 
     return parser.parse_args()
@@ -225,8 +236,13 @@ def main() -> None:
     neatplan main
     """
 
+    print("neatplan by c0m4r", f"v{__VERSION}")
+
     # Read arguments
     args = read_args()
+
+    if args.version:
+        sys.exit(0)
 
     # Read config
     config_json = crossplane.parse(args.config)
