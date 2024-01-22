@@ -17,6 +17,7 @@ So far:
 - Boot-time configuration only
 - Set link up (`ip link set <iface> up`)
 - Set IP address for a given interface (`ip addr add <ip/mask> dev <iface>`)
+- Set IP route for a given interface (`ip ro add <ip> dev <iface>`)
 - Set default IP route for a given interface (`ip ro add default via <ip> dev <iface>`)
 - Set nameservers (/etc/resolv.conf)
 
