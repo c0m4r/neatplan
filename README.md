@@ -28,6 +28,7 @@ So far:
 ```
 cd /opt
 git clone https://github.com/c0m4r/neatplan.git
+cd neatplan
 cp etc/init.d/neatplan /etc/init.d/
 cp -r etc/neatplan /etc/
 rc-update del networking boot
