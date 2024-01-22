@@ -14,6 +14,7 @@ Python >= 3.6 | iproute2 | [crossplane](https://github.com/nginxinc/crossplane)
 
 So far:
 
+- Boot-time configuration only
 - Set link up (`ip link set <iface> up`)
 - Set IP address for a given interface (`ip addr add <ip/mask> dev <iface>`)
 - Set default IP route for a given interface (`ip ro add default via <ip> dev <iface>`)
