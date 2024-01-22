@@ -1,5 +1,9 @@
 # neatplan
 
+![Python](https://img.shields.io/badge/made%20with-python-blue?logo=python&logoColor=ffffff)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![CodeFactor](https://www.codefactor.io/repository/github/c0m4r/neatplan/badge)](https://www.codefactor.io/repository/github/c0m4r/neatplan)
+
 nginx-style network configuration
 
 ## Dependencies
