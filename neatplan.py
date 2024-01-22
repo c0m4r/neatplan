@@ -251,27 +251,69 @@ def parse_nameservers(nameservers: Whatever) -> None:
         set_ns(nameserver)
 
 
+def parse_firewall(firewalls: Whatever) -> None:
+    """
+    Parse firewall
+    """
+    for firewall in firewalls:
+        command = ""
+        rules = ""
+        if firewall["directive"] == "iptables":
+            command = "iptables-restore"
+            rules = firewall["args"][0]
+        if firewall["directive"] == "ip6tables":
+            command = "ip6tables-restore"
+            rules = firewall["args"][0]
+        if not which(command):
+            print(command, "not found")
+            continue
+        if not os.path.isfile(rules):
+            print(rules, "is not a file")
+            continue
+        run([command, rules], check=False)
+
+
+def parse_ethernet(ethernet: Whatever) -> None:
+    """
+    Parse ethernet
+    """
+    for eth in ethernet:
+        iface = eth["directive"]
+        iface_up(iface)
+        for ethconf in eth["block"]:
+            if ethconf["directive"] == "addresses":
+                parse_addresses(ethconf["block"], iface)
+            if ethconf["directive"] == "routes":
+                parse_routes(ethconf["block"], iface)
+
+
+def parse_custom(custom: Whatever) -> None:
+    """
+    Parse custom commands
+    """
+    for cmd in custom:
+        os.system(cmd["args"][0])  # nosec
+
+
 def parse_network_configuration(cfg: Whatever) -> None:
     """
     Parse network configuration
     """
     for net in cfg:
+        if net["directive"] == "before":
+            parse_custom(net["block"])
+        if net["directive"] == "firewall":
+            parse_firewall(net["block"])
         if net["directive"] == "backend":
             backend = net["args"][0]
             print(f"Backend: {backend}")
         if net["directive"] == "ethernet":
-            ethernet = net["block"]
-            for eth in ethernet:
-                iface = eth["directive"]
-                iface_up(iface)
-                for ethconf in eth["block"]:
-                    if ethconf["directive"] == "addresses":
-                        parse_addresses(ethconf["block"], iface)
-                    if ethconf["directive"] == "routes":
-                        parse_routes(ethconf["block"], iface)
+            parse_ethernet(net["block"])
         if net["directive"] == "dns":
             os.remove("/etc/resolv.conf")
             parse_nameservers(net["block"])
+        if net["directive"] == "after":
+            parse_custom(net["block"])
 
 
 def set_ns(nameserver: str) -> None:
