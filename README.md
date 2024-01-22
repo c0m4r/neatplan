@@ -31,7 +31,7 @@ So far:
 
 ## Installation
 
-### pypi
+### PyPI
 
 ```
 pip install neatplan
