@@ -22,8 +22,8 @@ start() {
     # Invoke neatplan script
     $neatplan_script --config $neatplan_config >/dev/null
     # Waiting until tentatives are gone
+    ifaces=$(cat ${neatplan_runfile})
     eindent
-    ifaces=$(cat $neatplan_runfile)
     for iface in $ifaces ; do
         echo $iface
         tentatives=$($ipcmd -6 a s $iface | grep tentative)
@@ -35,9 +35,20 @@ start() {
             # Give up after 3 seconds to avoid infinite loop
             if [ $iters -gt 30 ]; then
                 tentatives=""
-                break
             fi
         done
     done
     eoutdent
+}
+
+stop() {
+    ebegin "Stopping neatplan"
+    ifaces=$(cat ${neatplan_runfile})
+    eindent
+    for iface in $ifaces ; do
+        echo $iface
+        $ipcmd link set $iface down
+    done
+    eoutdent
+    rm ${neatplan_runfile}
 }
