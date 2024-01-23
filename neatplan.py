@@ -271,6 +271,20 @@ def parse_firewall(firewalls: Whatever) -> None:
         run([command, rules], check=False)
 
 
+def dhcp(version: int, iface: str) -> None:
+    """
+    DHCP
+    """
+    dhclient = "/usr/sbin/dhclient"
+
+    if os.path.isfile(dhclient):
+        print(f"DHCP unavailable: {dhclient} not found")
+    elif version == 6:
+        run([dhclient, "-6", iface], check=False)
+    else:
+        run([dhclient, iface], check=False)
+
+
 def parse_ethernet(ethernet: Whatever) -> None:
     """
     Parse ethernet
@@ -283,6 +297,16 @@ def parse_ethernet(ethernet: Whatever) -> None:
                 parse_addresses(ethconf["block"], iface)
             if ethconf["directive"] == "routes":
                 parse_routes(ethconf["block"], iface)
+            if (
+                ethconf["directive"] == "dhcp4"
+                and ethconf["block"][0]["args"][0] == "true"
+            ):
+                dhcp(4, iface)
+            if (
+                ethconf["directive"] == "dhcp6"
+                and ethconf["block"][0]["args"][0] == "true"
+            ):
+                dhcp(6, iface)
 
 
 def parse_custom(custom: Whatever) -> None:
