@@ -16,17 +16,16 @@ nginx-style network configuration
 
 ## Features
 
-So far:
-
-- Boot-time configuration only
-- IPv4/IPv6 autodetection (`ip` or `ip -6` prefix)
-- Set loopback interface up by default (`ip link set lo up`)
+- Boot-time configuration
+- IPv4/IPv6 support
+- Loopback interface up by default (`ip link set lo up`)
 - Set link up for a given interface (`ip link set <iface> up`)
 - Set IP address for a given interface (`ip addr add <ip/mask> dev <iface>`)
 - Set IP route for a given interface (`ip ro add <ip> dev <iface>`)
 - Set default IP route for a given interface (`ip ro add default via <ip> dev <iface>`)
 - Set via IP route for a given interface (`ip ro add <ip> via <ip> dev <iface>`)
 - Set nameservers (/etc/resolv.conf)
+- DHCP configuration (dhclient)
 - Firewall configuration (`iptables-restore`, `ip6tables-restore`)
 - Custom commands to run before and after
 - Configured interfaces are being stored in /run/neatplan
