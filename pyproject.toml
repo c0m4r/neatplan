@@ -1,6 +1,6 @@
 [project]
 name = "neatplan"
-version = "0.0.2"
+version = "0.1.0"
 authors = [
   { name="c0m4r", email="github@wolfet.pl" },
 ]
