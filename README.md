@@ -12,6 +12,7 @@ nginx-style network configuration
 * Python >= 3.6
 * [crossplane](https://github.com/nginxinc/crossplane)
 * iproute2
+* dhclient (optional)
 
 ## Features
 

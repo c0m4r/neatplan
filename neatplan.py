@@ -163,7 +163,6 @@ def set_route(route: str, iface: str) -> None:
     if "default" in route:
         default_command = [
             which_ip(),
-            "-6",
             "route",
             "add",
             "default",
