@@ -66,6 +66,12 @@ network {
     }
     ethernet {
         eth0 {
+            dhcp4 {
+                enable true;
+            }
+            dhcp6 {
+                enable false;
+            }
             addresses {
                 address fe80:ffff:eeee:dddd::1/64;
                 address fe80:ffff:eeee:dddd::2/64;
@@ -89,6 +95,37 @@ network {
     }
 }
 ```
+
+## Documentation
+
+### Contexts
+
+| name | context | description | 
+| --- | --- | --- |
+| network | | root of network configuration |
+| before | network | list of commands to run before network configuration |
+| firewall | network | firewall configuration |
+| ethernet | network | ethernet configuration |
+| \<iface\> | network &rarr; ethernet | network interface configuration |
+| dhcp4 | network &rarr; ethernet &rarr; \<iface\> | DHCP v4 settings |
+| dhcp6 | network &rarr; ethernet &rarr; \<iface\> | DHCP v6 settings |
+| addresses | network &rarr; ethernet &rarr; \<iface\> | IP addresses configuration |
+| routes | network &rarr; ethernet &rarr; \<iface\> | IP routes configuration |
+| dns | network | list of nameservers |
+| before | network | list of commands to run after network configuration |
+
+### Directives
+
+| name | context | syntax | description |
+| --- | --- | --- | --- |
+| backend | network | `backend <name>;` | IP configuration backend |
+| command | before, after | `command "<command> <args>";` | Custom shell command |
+| iptables | firewall | `iptables <filepath>;` | Path to iptables rules |
+| ip6tables | firewall | `ip6tables <filepath>;` | Path to ip6tables rules |
+| enable | dhcp4, dhcp6 | `option true \| false;` | Enable or disable option |
+| address | \<iface\> | `address <ip/mask>;` | IPv4 or IPv6 address |
+| route | \<iface\> | `route <ip> [default \| via <ip>];` | IP route |
+| nameserver | dns | `nameserver <ip>;` | Nameserver address |
 
 ## License
 
