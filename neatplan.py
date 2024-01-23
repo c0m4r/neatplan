@@ -276,7 +276,7 @@ def dhcp(version: int, iface: str) -> None:
     """
     dhclient = "/usr/sbin/dhclient"
 
-    if os.path.isfile(dhclient):
+    if not os.path.isfile(dhclient):
         print(f"DHCP unavailable: {dhclient} not found")
     elif version == 6:
         run([dhclient, "-6", iface], check=False)
