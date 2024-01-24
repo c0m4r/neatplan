@@ -218,4 +218,4 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 ## Funding
 
-If you found this script helpful, please consider [making a donation](https://en.wosp.org.pl/fundacja/jak-wspierac-wosp/wesprzyj-online) to a charity on my behalf. Thank you.
+If you found this software somewhat useful, please consider [making a donation](https://en.wosp.org.pl/fundacja/jak-wspierac-wosp/wesprzyj-online) to a [charity](https://en.wikipedia.org/wiki/Great_Orchestra_of_Christmas_Charity) on my behalf. Thank you.
