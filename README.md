@@ -7,6 +7,10 @@
 
 nginx-style network configuration
 
+...pretty neat, huh?
+
+Why, for the love of integrated circuits why you ask? Because I can.
+
 ## Dependencies
 
 * Python >= 3.6
@@ -28,7 +32,7 @@ nginx-style network configuration
 - DHCP configuration (dhclient)
 - Firewall configuration (`iptables-restore`, `ip6tables-restore`)
 - Custom commands to run before and after
-- Configured interfaces are being stored in /run/neatplan
+- Configured interfaces are being stored in `/run/neatplan`
 
 ## Installation
 
@@ -150,12 +154,16 @@ network {
 
 ## Writing init scripts
 
-* Neatplan saves all configured interfaces (including `lo`) at boot time to `/run/neatplan`.
-* When starting neatplan make sure it is started before services that rely on the network, preferably within boot runlevel
+* Neatplan saves all configured interfaces (including `lo`) at boot time to `/run/neatplan`. You can iterate through them or do whatever the hell you want.
+* When starting neatplan make sure it is started before services that rely on the network, preferably within boot runlevel (thank you captain obvious)
 * If you're about to use IPv6 you have to make sure that [tentative states](https://www.the-art-of-web.com/system/ipv6-dad-tentative/) are gone before ending a start job
 * When stopping neatplan make sure to `rm /run/neatplan` at the end.
 
 ## Documentation
+
+I'm not saying it's the worst documentation I wrote, but it's the worst documentation I wrote.
+
+![image](https://github.com/c0m4r/neatplan/assets/6292788/4aec222e-fe3e-4c11-a896-44b611c8d8d8)
 
 ### Contexts
 
@@ -187,6 +195,8 @@ network {
 | nameserver | dns | `nameserver <ip>;` | Nameserver address |
 
 ## License
+
+![image](https://github.com/c0m4r/neatplan/assets/6292788/74c6156b-ffc9-434c-aeb8-5223ac229880)
 
 ```
 neatplan - nginx-like network configuration
