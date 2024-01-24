@@ -34,7 +34,7 @@ nginx-style network configuration
 
 ### PyPI
 
-```
+```bash
 pip install neatplan
 mkdir /etc/neatplan
 touch etc/neatplan/default.conf
