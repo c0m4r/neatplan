@@ -154,7 +154,7 @@ network {
 
 ## Writing init scripts
 
-* Neatplan saves all configured interfaces (including `lo`) at boot time to `/run/neatplan`. You can iterate through them or do whatever the hell you want.
+* Neatplan saves all configured interfaces (including `lo`) at boot time to `/run/neatplan`. You can iterate through them or do whatever the hell you want with that information.
 * When starting neatplan make sure it is started before services that rely on the network, preferably within boot runlevel (thank you captain obvious)
 * If you're about to use IPv6 you have to make sure that [tentative states](https://www.the-art-of-web.com/system/ipv6-dad-tentative/) are gone before ending a start job
 * When stopping neatplan make sure to `rm /run/neatplan` at the end.
