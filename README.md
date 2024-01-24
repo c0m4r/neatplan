@@ -52,7 +52,40 @@ rc-update add neatplan boot
 
 ## Configuration
 
-Sample config: `/etc/neatplan/default.conf`
+#### Config path
+
+`/etc/neatplan/default.conf`
+
+#### Simple example
+
+* IPv4 using DHCP
+* Static IPv6 address
+* IPv6-only CloudFlare DNS
+
+```nginx
+network {
+    backend iproute2;
+    ethernet {
+        eth0 {
+            dhcp4 {
+                enable true;
+            }
+            addresses {
+                address fe80:ffff:eeee:dddd::1/64;
+            }
+            routes {
+                route fe80::1 default;
+            }
+        }
+    }
+    dns {
+        nameserver 2606:4700:4700::1111;
+        nameserver 2606:4700:4700::1001;
+    }
+}
+```
+
+#### Full feature showcase
 
 ```nginx
 network {
