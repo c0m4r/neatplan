@@ -32,16 +32,24 @@ nginx-style network configuration
 
 ## Installation
 
+Neatplan is intended for people who know what they are doing, or at least for those aware that this may result in the loss of access to the server over the network. If you're afraid, pick something else. Although, returning to the previous network configuration method is trivial because neatplan does not introduce any invasive changes to the system. But before you start destroying your network configuration, however enjoyable it is, make sure you have access to some kind of remote (or local) console that will allow you to debug without direct SSH access.
+
 ### PyPI
+
+You can get neatplan with simple:
 
 ```bash
 pip install neatplan
-mkdir /etc/neatplan
-touch etc/neatplan/default.conf
-neatplan --help
 ```
 
+Next, save your configuration to `/etc/neatplan/default.conf`
+
+And make sure neatplan starts at boot time. 
+See the [OpenRC init script](/etc/init.d/neatplan) example.
+
 ### Alpine Linux
+
+Neatplan as it was intended. Just enough to deploy your network setup. Network connection is required.
 
 ```bash
 cd /opt
@@ -51,6 +59,14 @@ cp etc/init.d/neatplan /etc/init.d/
 cp -r etc/neatplan /etc/
 rc-update del networking boot
 rc-update add neatplan boot
+```
+
+Next vi/vim/nvim/nano/whatever /etc/neatplan/default.conf
+
+Pray for it to work and say goodbye to your server
+
+```bash
+reboot
 ```
 
 ## Configuration
@@ -131,6 +147,13 @@ network {
     }
 }
 ```
+
+## Writing init scripts
+
+* Neatplan saves all configured interfaces (including `lo`) at boot time to `/run/neatplan`.
+* When starting neatplan make sure it is started before services that rely on the network, preferably within boot runlevel
+* If you're about to use IPv6 you have to make sure that [tentative states](https://www.the-art-of-web.com/system/ipv6-dad-tentative/) are gone before ending a start job
+* When stopping neatplan make sure to `rm /run/neatplan` at the end.
 
 ## Documentation
 
