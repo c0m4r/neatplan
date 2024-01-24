@@ -36,6 +36,9 @@ nginx-style network configuration
 
 ```
 pip install neatplan
+mkdir /etc/neatplan
+touch etc/neatplan/default.conf
+neatplan --help
 ```
 
 ### Alpine Linux
