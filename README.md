@@ -48,7 +48,7 @@ pip install neatplan
 
 Next, save your configuration to `/etc/neatplan/default.conf`
 
-Once you're happy with your configuration simply hit `neatplan`.
+Once you're happy with your configuration, simply hit `neatplan`.
 
 If you would like to start neatplan at boot time, see: [writing init scripts](#Writing-init-scripts).
 
@@ -60,7 +60,7 @@ cd /opt/neatplan
 ./deploy.sh
 ```
 
-If you would like to replace networking with neatplan:
+To replace networking with neatplan at boot time:
 
 ```bash
 rc-update del networking boot
