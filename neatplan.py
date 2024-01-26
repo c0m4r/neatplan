@@ -279,9 +279,9 @@ def dhcp(version: int, iface: str) -> None:
     if not os.path.isfile(dhclient):
         print(f"DHCP unavailable: {dhclient} not found")
     elif version == 6:
-        run([dhclient, "-6", iface], check=False)
+        run([dhclient, "-6", "-1", iface], check=False)
     else:
-        run([dhclient, iface], check=False)
+        run([dhclient, "-1", iface], check=False)
 
 
 def parse_ethernet(ethernet: Whatever) -> None:
