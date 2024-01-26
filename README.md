@@ -48,20 +48,21 @@ pip install neatplan
 
 Next, save your configuration to `/etc/neatplan/default.conf`
 
-And make sure neatplan starts at boot time. 
-See the [OpenRC init script](/etc/init.d/neatplan) example.
+Once you're happy with your configuration simply hit `neatplan`.
+
+If you would like to start neatplan at boot time, see: [writing init scripts](#Writing-init-scripts).
 
 ### Alpine Linux
 
-Neatplan as it was intended. Just enough to deploy your network setup. Network connection is required.
+```bash
+git clone https://github.com/c0m4r/neatplan.git /opt/neatplan
+cd /opt/neatplan
+./deploy.sh
+```
+
+If you would like to replace networking with neatplan:
 
 ```bash
-apk add git py3-psutil
-cd /opt
-git clone https://github.com/c0m4r/neatplan.git
-cd neatplan
-cp etc/init.d/neatplan /etc/init.d/
-cp -r etc/neatplan /etc/
 rc-update del networking boot
 rc-update add neatplan boot
 ```
@@ -69,12 +70,14 @@ rc-update add neatplan boot
 ### Void Linux
 
 ```bash
-xbps-install git python3-psutil
-cd /opt
-git clone https://github.com/c0m4r/neatplan.git
-cd neatplan
-cp etc/sv/neatplan /etc/sv/
-cp -r etc/neatplan /etc/
+git clone https://github.com/c0m4r/neatplan.git /opt/neatplan
+cd /opt/neatplan
+./deploy.sh
+```
+
+To start neatplan as a runit service:
+
+```bash
 ln -s /etc/sv/neatplan /var/service/
 ```
 
@@ -163,6 +166,9 @@ network {
 * When starting neatplan make sure it is started before services that rely on the network, preferably within boot runlevel (thank you captain obvious)
 * If you're about to use IPv6 you have to make sure that [tentative states](https://www.the-art-of-web.com/system/ipv6-dad-tentative/) are gone before ending a start job
 * When stopping neatplan make sure to `rm /run/neatplan` at the end.
+* Handle Python venv before executing neatplan with `. /opt/neatplan/.venv/bin/activate` or set the `PATH=/opt/neatplan/.venv:$PATH`.
+
+See example [OpenRC](/etc/init.d/neatplan) and [runit](/etc/sv/neatplan/run) init scripts.
 
 ## Documentation
 
