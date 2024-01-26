@@ -73,6 +73,17 @@ Pray for it to work and say goodbye to your server
 reboot
 ```
 
+### Void Linux
+
+```bash
+cd /opt
+git clone https://github.com/c0m4r/neatplan.git
+cd neatplan
+cp etc/sv/neatplan /etc/sv/
+cp -r etc/neatplan /etc/
+ln -s /etc/sv/neatplan /var/service/
+```
+
 ## Configuration
 
 #### Config path
