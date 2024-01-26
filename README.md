@@ -48,29 +48,20 @@ of remote (or local) console that will allow you to debug without direct SSH acc
 
 ### PyPI
 
-You can get neatplan with simple:
-
 ```bash
 pip install neatplan
 ```
 
-Next, save your configuration to `/etc/neatplan/default.conf`
-
-Once you're happy with your configuration, simply hit `neatplan`.
-
-If you would like to start neatplan at boot time, see: [writing init scripts](#Writing-init-scripts).
-
-### Git
+### Github
 
 ```bash
 git clone https://github.com/c0m4r/neatplan.git /opt/neatplan
 cd /opt/neatplan
 ./deploy.sh
-./neatplan --help
 ```
 
 Deploy script will create the Python venv, copy a respective init script 
-and default config file so you're ready to go.
+and a config file so you're ready to go.
 
 #### Alpine Linux
 
