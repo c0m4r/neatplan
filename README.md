@@ -36,7 +36,15 @@ Why, for the love of integrated circuits why you ask? Because I can.
 
 ## Installation
 
-Neatplan is intended for people who know what they are doing, or at least for those aware that this may result in the loss of access to the server over the network. If you're afraid, pick something else. Although, returning to the previous network configuration method is trivial because neatplan does not introduce any invasive changes to the system. But before you start destroying your network configuration, however enjoyable it is, make sure you have access to some kind of remote (or local) console that will allow you to debug without direct SSH access.
+Neatplan is intended for people who know what they are doing, 
+or at least for those aware that this may result 
+in the loss of access to the server over the network. 
+If you're afraid of breaking things, pick something else. 
+Although, returning to the previous network configuration method is trivial 
+because neatplan does not introduce any invasive changes to the system. 
+But before you start destroying your network configuration, 
+however enjoyable it is, make sure you have access to some kind 
+of remote (or local) console that will allow you to debug without direct SSH access.
 
 ### PyPI
 
@@ -52,13 +60,19 @@ Once you're happy with your configuration, simply hit `neatplan`.
 
 If you would like to start neatplan at boot time, see: [writing init scripts](#Writing-init-scripts).
 
-### Alpine Linux
+### Git
 
 ```bash
 git clone https://github.com/c0m4r/neatplan.git /opt/neatplan
 cd /opt/neatplan
 ./deploy.sh
+./neatplan --help
 ```
+
+Deploy script will create the Python venv, copy a respective init script 
+and default config file so you're ready to go.
+
+#### Alpine Linux
 
 To replace networking with neatplan at boot time:
 
@@ -67,13 +81,7 @@ rc-update del networking boot
 rc-update add neatplan boot
 ```
 
-### Void Linux
-
-```bash
-git clone https://github.com/c0m4r/neatplan.git /opt/neatplan
-cd /opt/neatplan
-./deploy.sh
-```
+#### Void Linux
 
 To start neatplan as a runit service:
 
@@ -162,11 +170,15 @@ network {
 
 ## Writing init scripts
 
-* Neatplan saves all configured interfaces (including `lo`) at boot time to `/run/neatplan`. You can iterate through them or do whatever the hell you want with that information.
-* When starting neatplan make sure it is started before services that rely on the network, preferably within boot runlevel (thank you captain obvious)
-* If you're about to use IPv6 you have to make sure that [tentative states](https://www.the-art-of-web.com/system/ipv6-dad-tentative/) are gone before ending a start job
+* Neatplan saves all configured interfaces (including `lo`) at boot time to `/run/neatplan`.
+  You can iterate through them or do whatever the hell you want with that information.
+* When starting neatplan make sure it is started before services that rely on the network,
+  preferably within boot runlevel (thank you captain obvious)
+* If you're about to use IPv6 you have to make sure that
+  [tentative states](https://www.the-art-of-web.com/system/ipv6-dad-tentative/) are gone before ending a start job
 * When stopping neatplan make sure to `rm /run/neatplan` at the end.
-* Handle Python venv before executing neatplan with `. /opt/neatplan/.venv/bin/activate` or set the `PATH=/opt/neatplan/.venv:$PATH`.
+* Handle Python venv before executing neatplan with `. /opt/neatplan/.venv/bin/activate`
+  or set the `PATH=/opt/neatplan/.venv:$PATH`.
 
 See example [OpenRC](/etc/init.d/neatplan) and [runit](/etc/sv/neatplan/run) init scripts.
 
@@ -229,4 +241,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 ## Funding
 
-If you found this software somewhat useful, please consider [making a donation](https://en.wosp.org.pl/fundacja/jak-wspierac-wosp/wesprzyj-online) to a [charity](https://en.wikipedia.org/wiki/Great_Orchestra_of_Christmas_Charity) on my behalf. Thank you.
+If you found this software somewhat useful, 
+please consider [making a donation](https://en.wosp.org.pl/fundacja/jak-wspierac-wosp/wesprzyj-online) 
+to a [charity](https://en.wikipedia.org/wiki/Great_Orchestra_of_Christmas_Charity) on my behalf. 
+Thank you.
