@@ -32,7 +32,7 @@ import crossplane
 import psutil
 
 
-__VERSION = "0.1.0"
+__VERSION = "0.2.0-rc1"
 
 
 def read_args() -> argparse.Namespace:
@@ -58,6 +58,12 @@ def read_args() -> argparse.Namespace:
         action="store_true",
         default=False,
     )
+    parser.add_argument(
+        "--dry-run",
+        help="Don't execute, only show what you've got",
+        action="store_true",
+        default=False,
+    )
 
     return parser.parse_args()
 
@@ -69,7 +75,7 @@ def check_init_system() -> None:
     init_name = psutil.Process(1).name()
     if init_name == "systemd":
         print("systemd detected, this program will self-destruct now")
-        sys.exit(1)
+        print("just kidding, but seriously: ZnVjayBzeXN0ZW1k")
 
 
 def check_errors(config: Whatever) -> None:
@@ -131,30 +137,42 @@ def which_ip() -> str:
         return ip_cmd
 
 
-def iface_up(iface: str) -> None:
+def iface_up(iface: str, dry_run: bool) -> None:
     """
     Bring the interface up
     """
-    run([which_ip(), "link", "set", iface, "up"], check=True)
-    with open("/run/neatplan", "a+", encoding="utf-8") as neatplan_run:
-        neatplan_run.write(f"{iface}\n")
+    command = [which_ip(), "link", "set", iface, "up"]
+
+    if not dry_run:
+        run(command, check=True)
+        with open("/run/neatplan", "a+", encoding="utf-8") as neatplan_run:
+            neatplan_run.write(f"{iface}\n")
+    else:
+        print("dry-run", command)
 
 
 def set_ip(ip: str, iface: str) -> None:
     """
     Set IP
     """
+    command = []
+
     if is_ipv6(ip):
-        run([which_ip(), "-6", "address", "add", ip, "dev", iface], check=False)
+        command = [which_ip(), "-6", "address", "add", ip, "dev", iface]
 
     if is_ipv4(ip):
-        run([which_ip(), "address", "add", ip, "dev", iface], check=False)
+        command = [which_ip(), "address", "add", ip, "dev", iface]
+
+    run(command, check=False)
 
 
 def set_route(route: str, iface: str) -> None:
     """
     Set route
     """
+
+    command = []
+    command6 = []
     default_command = []
     default6_command = []
     via_command = []
@@ -204,6 +222,9 @@ def set_route(route: str, iface: str) -> None:
             "dev",
             iface,
         ]
+    else:
+        command = [which_ip(), "route", "add", route[0], "dev", iface]
+        command6 = [which_ip(), "-6", "route", "add", route[0], "dev", iface]
 
     if is_ipv6(route[0]):
         if default6_command:
@@ -211,7 +232,7 @@ def set_route(route: str, iface: str) -> None:
         elif via6_command:
             run(via6_command, check=False)
         else:
-            run([which_ip(), "-6", "route", "add", route[0], "dev", iface], check=False)
+            run(command6, check=False)
 
     if is_ipv4(route[0]):
         if default_command:
@@ -219,36 +240,50 @@ def set_route(route: str, iface: str) -> None:
         if via_command:
             run(via_command, check=False)
         else:
-            run([which_ip(), "route", "add", route[0], "dev", iface], check=False)
+            run(command, check=False)
 
 
-def parse_addresses(addresses: Whatever, iface: str) -> None:
+def parse_addresses(addresses: Whatever, iface: str, dry_run: bool) -> None:
     """
     Parse addresses
     """
     for addr in addresses:
-        set_ip(addr["args"][0], iface)
+        if not dry_run:
+            set_ip(addr["args"][0], iface)
+        else:
+            print("dry-run", "IP", addr["args"][0], iface)
 
 
-def parse_routes(routes: Whatever, iface: str) -> None:
+def parse_routes(routes: Whatever, iface: str, dry_run: bool) -> None:
     """
     Parse routes
     """
     for route in routes:
-        set_route(route["args"], iface)
+        if not dry_run:
+            set_route(route["args"], iface)
+        else:
+            print("dry-run", "route", route["args"], iface)
 
 
-def parse_nameservers(nameservers: Whatever) -> None:
+def parse_nameservers(nameservers: Whatever, dry_run: bool) -> None:
     """
     Parse nameservers
     """
+    resolv_conf_file = "/etc/resolv.conf"
+
+    if not dry_run and os.path.isfile(resolv_conf_file):
+        os.remove(resolv_conf_file)
+
     for ns in nameservers:
         # type = ns["directive"]
         nameserver = ns["args"][0]
-        set_ns(nameserver)
+        if not dry_run:
+            set_ns(nameserver, resolv_conf_file)
+        else:
+            print("dry-run", "nameserver", nameserver)
 
 
-def parse_firewall(firewalls: Whatever) -> None:
+def parse_firewall(firewalls: Whatever, dry_run: bool) -> None:
     """
     Parse firewall
     """
@@ -267,81 +302,94 @@ def parse_firewall(firewalls: Whatever) -> None:
         if not os.path.isfile(rules):
             print(rules, "is not a file")
             continue
-        run([command, rules], check=False)
+
+        if not dry_run:
+            run([command, rules], check=False)
+        else:
+            print("dry-run", command, rules)
 
 
-def dhcp(version: int, iface: str) -> None:
+def dhcp(version: int, iface: str, dry_run: bool) -> None:
     """
     DHCP
     """
+    command = []
     dhclient = "/usr/sbin/dhclient"
 
     if not os.path.isfile(dhclient):
         print(f"DHCP unavailable: {dhclient} not found")
     elif version == 6:
-        run([dhclient, "-6", "-1", iface], check=False)
+        command = [dhclient, "-6", "-1", iface]
     else:
-        run([dhclient, "-1", iface], check=False)
+        command = [dhclient, "-1", iface]
+
+    if not dry_run:
+        run(command, check=False)
+    else:
+        print("dry-run", command)
 
 
-def parse_ethernet(ethernet: Whatever) -> None:
+def parse_ethernet(ethernet: Whatever, dry_run: bool) -> None:
     """
     Parse ethernet
     """
     for eth in ethernet:
         iface = eth["directive"]
-        iface_up(iface)
+        iface_up(iface, dry_run)
         for ethconf in eth["block"]:
             if ethconf["directive"] == "addresses":
-                parse_addresses(ethconf["block"], iface)
+                parse_addresses(ethconf["block"], iface, dry_run)
             if ethconf["directive"] == "routes":
-                parse_routes(ethconf["block"], iface)
+                parse_routes(ethconf["block"], iface, dry_run)
             if (
                 ethconf["directive"] == "dhcp4"
                 and ethconf["block"][0]["args"][0] == "true"
             ):
-                dhcp(4, iface)
+                dhcp(4, iface, dry_run)
             if (
                 ethconf["directive"] == "dhcp6"
                 and ethconf["block"][0]["args"][0] == "true"
             ):
-                dhcp(6, iface)
+                dhcp(6, iface, dry_run)
 
 
-def parse_custom(custom: Whatever) -> None:
+def parse_custom(custom: Whatever, dry_run: bool) -> None:
     """
     Parse custom commands
     """
     for cmd in custom:
-        os.system(cmd["args"][0])  # nosec
+        command = cmd["args"][0]
+        if not dry_run:
+            os.system(command)  # nosec
+        else:
+            print("dry-run", "custom", command)
 
 
-def parse_network_configuration(cfg: Whatever) -> None:
+def parse_network_configuration(cfg: Whatever, dry_run: bool) -> None:
     """
     Parse network configuration
     """
     for net in cfg:
-        if net["directive"] == "before":
-            parse_custom(net["block"])
-        if net["directive"] == "firewall":
-            parse_firewall(net["block"])
         if net["directive"] == "backend":
             backend = net["args"][0]
             print(f"Backend: {backend}")
+        if net["directive"] == "before":
+            parse_custom(net["block"], dry_run)
+        if net["directive"] == "firewall":
+            parse_firewall(net["block"], dry_run)
         if net["directive"] == "ethernet":
-            parse_ethernet(net["block"])
+            parse_ethernet(net["block"], dry_run)
         if net["directive"] == "dns":
-            os.remove("/etc/resolv.conf")
-            parse_nameservers(net["block"])
+            parse_nameservers(net["block"], dry_run)
         if net["directive"] == "after":
-            parse_custom(net["block"])
+            parse_custom(net["block"], dry_run)
 
 
-def set_ns(nameserver: str) -> None:
+def set_ns(nameserver: str, resolv_conf_file: str) -> None:
     """
     Set nameserver
     """
-    with open("/etc/resolv.conf", "a+", encoding="utf-8") as resolv_conf:
+    with open(resolv_conf_file, "a+", encoding="utf-8") as resolv_conf:
         if is_ip(nameserver):
             print("nameserver", nameserver)
             resolv_conf.write(f"nameserver {nameserver}\n")
@@ -360,6 +408,9 @@ def main() -> None:
     if args.version:
         sys.exit(0)
 
+    if args.dry_run:
+        print("Running dry-run mode")
+
     # Read config
     config_json = crossplane.parse(args.config)
 
@@ -370,12 +421,12 @@ def main() -> None:
     check_init_system()
 
     # Set lookpback device up
-    iface_up("lo")
+    iface_up("lo", args.dry_run)
 
     # Parse config
     for cfg in config_json["config"][0]["parsed"]:
         if cfg["directive"] == "network":
-            parse_network_configuration(cfg["block"])
+            parse_network_configuration(cfg["block"], args.dry_run)
 
 
 if __name__ == "__main__":
