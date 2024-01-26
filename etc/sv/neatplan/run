@@ -1,0 +1,5 @@
+#!/bin/sh
+exec 2>&1
+set -e
+/opt/neatplan/neatplan.py
+exec chpst -b neatplan pause
