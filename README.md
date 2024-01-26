@@ -65,14 +65,6 @@ rc-update del networking boot
 rc-update add neatplan boot
 ```
 
-Next vi/vim/nvim/nano/whatever /etc/neatplan/default.conf
-
-Pray for it to work and say goodbye to your server
-
-```bash
-reboot
-```
-
 ### Void Linux
 
 ```bash
