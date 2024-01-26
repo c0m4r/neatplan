@@ -1,5 +1,8 @@
 #!/bin/sh
 exec 2>&1
 set -e
+if [ -d /opt/neatplan/.venv ]; then
+  . /opt/neatplan/.venv/bin/activate
+fi
 /opt/neatplan/neatplan.py
 exec chpst -b neatplan pause

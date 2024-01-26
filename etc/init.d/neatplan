@@ -4,6 +4,7 @@
 # https://github.com/c0m4r/neatplan
 # Licnse: GPLv3
 
+neatplan_venv="/opt/neatplan/.venv/bin/activate"
 neatplan_script="/opt/neatplan/neatplan.py"
 neatplan_config="/etc/neatplan/default.conf"
 neatplan_runfile="/run/neatplan"
@@ -20,6 +21,9 @@ depend() {
 start() {
     ebegin "Starting neatplan"
     # Invoke neatplan script
+    if [ -d ${neatplan_venv} ]; then
+        . ${neatplan_venv}
+    fi
     $neatplan_script --config $neatplan_config >/dev/null
     # Waiting until tentatives are gone
     ifaces=$(cat ${neatplan_runfile})
@@ -49,6 +53,8 @@ stop() {
         echo $iface
         $ipcmd link set $iface down
     done
+    if [ -e ${neatplan_runfile} ]; then
+        rm -f ${neatplan_runfile}
+    fi
     eoutdent
-    rm ${neatplan_runfile}
 }
