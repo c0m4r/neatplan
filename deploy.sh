@@ -66,4 +66,4 @@ deploy_config
 deploy_init
 
 echo "Configuration: /etc/neatplan/default.conf"
-echo "Usage: $SCRIPT_PATH/neatplan.py"
+echo "Usage: $SCRIPT_PATH/neatplan --help"
