@@ -56,6 +56,7 @@ See the [OpenRC init script](/etc/init.d/neatplan) example.
 Neatplan as it was intended. Just enough to deploy your network setup. Network connection is required.
 
 ```bash
+apk add git py3-psutil
 cd /opt
 git clone https://github.com/c0m4r/neatplan.git
 cd neatplan
@@ -68,6 +69,7 @@ rc-update add neatplan boot
 ### Void Linux
 
 ```bash
+xbps-install git python3-psutil
 cd /opt
 git clone https://github.com/c0m4r/neatplan.git
 cd neatplan
