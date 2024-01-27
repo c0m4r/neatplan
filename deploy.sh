@@ -5,6 +5,11 @@ SCRIPT_PATH=$(dirname "$SCRIPT")
 
 cd $SCRIPT_PATH
 
+if [ $(id -u) -ne 0 ]; then
+    exec sudo "${SCRIPT}"
+    exit 1
+fi
+
 VERSION=$(grep ^__VER neatplan/__init__.py | awk '{print $3}' | sed s/\"//g;)
 echo "neatplan v${VERSION}"
 
@@ -75,4 +80,4 @@ deploy_config
 deploy_init
 
 echo "Configuration: /etc/neatplan/default.conf"
-echo "Usage: $SCRIPT_PATH/neatplan --help"
+echo "Usage: $SCRIPT_PATH/neatplan.sh --help"
