@@ -148,7 +148,7 @@ def iface_up(iface: str, dry_run: bool) -> None:
         with open("/run/neatplan", "a+", encoding="utf-8") as neatplan_run:
             neatplan_run.write(f"{iface}\n")
     else:
-        print("dry-run", command)
+        print("dry-run:", command)
 
 
 def set_ip(ip: str, iface: str) -> None:
@@ -251,7 +251,7 @@ def parse_addresses(addresses: Whatever, iface: str, dry_run: bool) -> None:
         if not dry_run:
             set_ip(addr["args"][0], iface)
         else:
-            print("dry-run", "IP", addr["args"][0], iface)
+            print("dry-run:", addr["args"][0], iface)
 
 
 def parse_routes(routes: Whatever, iface: str, dry_run: bool) -> None:
@@ -262,7 +262,7 @@ def parse_routes(routes: Whatever, iface: str, dry_run: bool) -> None:
         if not dry_run:
             set_route(route["args"], iface)
         else:
-            print("dry-run", "route", route["args"], iface)
+            print("dry-run:", route["args"], iface)
 
 
 def parse_nameservers(nameservers: Whatever, dry_run: bool) -> None:
@@ -280,7 +280,7 @@ def parse_nameservers(nameservers: Whatever, dry_run: bool) -> None:
         if not dry_run:
             set_ns(nameserver, resolv_conf_file)
         else:
-            print("dry-run", "nameserver", nameserver)
+            print("dry-run:", "nameserver", nameserver)
 
 
 def parse_firewall(firewalls: Whatever, dry_run: bool) -> None:
@@ -306,7 +306,7 @@ def parse_firewall(firewalls: Whatever, dry_run: bool) -> None:
         if not dry_run:
             run([command, rules], check=False)
         else:
-            print("dry-run", command, rules)
+            print("dry-run:", command, rules)
 
 
 def dhcp(version: int, iface: str, dry_run: bool) -> None:
@@ -326,7 +326,7 @@ def dhcp(version: int, iface: str, dry_run: bool) -> None:
     if not dry_run:
         run(command, check=False)
     else:
-        print("dry-run", command)
+        print("dry-run:", command)
 
 
 def parse_ethernet(ethernet: Whatever, dry_run: bool) -> None:
@@ -362,7 +362,7 @@ def parse_custom(custom: Whatever, dry_run: bool) -> None:
         if not dry_run:
             os.system(command)  # nosec
         else:
-            print("dry-run", "custom", command)
+            print("dry-run:", command)
 
 
 def parse_network_configuration(cfg: Whatever, dry_run: bool) -> None:
@@ -407,7 +407,6 @@ def main() -> None:
 
     if args.version:
         sys.exit(0)
-
     if args.dry_run:
         print("Running dry-run mode")
 
