@@ -32,7 +32,7 @@ import crossplane
 import psutil
 
 
-__VERSION = "0.2.0-rc1"
+__VERSION = "0.2.0"
 
 
 def read_args() -> argparse.Namespace:
