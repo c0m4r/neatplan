@@ -6,7 +6,6 @@ SCRIPT=$(readlink -f "$0")
 SCRIPT_PATH=$(dirname "$SCRIPT")
 
 cd $SCRIPT_PATH
-cd ..
 
 if [ ! -d .venv ] && [ -x deploy.sh ]; then
     . deploy.sh
