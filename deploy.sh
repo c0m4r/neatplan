@@ -52,6 +52,10 @@ deploy_config() {
     if [ ! -e /etc/neatplan/default.conf ]; then
         echo "Deploying default config"
         cp -r etc/neatplan /etc/
+        default_eth_iface=$(ls /sys/class/net/ | grep ^e | head -n 1)
+        if [ "$default_eth_iface" ]; then
+            sed -i "s/eth0/$default_eth_iface/g;" /etc/neatplan/default.conf
+        fi
     else
         echo "Config already deployed"
     fi
