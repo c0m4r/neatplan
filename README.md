@@ -31,7 +31,7 @@ Why, for the love of integrated circuits why you ask? Because I can.
 - Set nameservers (/etc/resolv.conf)
 - DHCP configuration (dhclient)
 - Firewall configuration (`iptables-restore`, `ip6tables-restore`)
-- Custom commands to run before and after
+- Custom commands to run before and after for advanced and custom configuration
 - Configured interfaces are being stored in `/run/neatplan`
 
 ## Installation
@@ -45,6 +45,9 @@ because neatplan does not introduce any invasive changes to the system.
 But before you start destroying your network configuration, 
 however enjoyable it is, make sure you have access to some kind 
 of remote (or local) console that will allow you to debug without direct SSH access.
+
+All the scripts must be run with root privileges, 
+as it is necessary to interact with network configuration.
 
 ### PyPI
 
@@ -60,8 +63,12 @@ cd /opt/neatplan
 ./deploy.sh
 ```
 
-Deploy script will create the Python venv, copy a respective init script 
-and a config file so you're ready to go.
+The script will:
+
+* create the Python venv
+* create a symlink to the wrapper in `/usr/local/bin/neatplan`
+* copy the respective init script if it's available
+* create a config file in `/etc/neatplan/default.conf`
 
 #### Alpine Linux
 
@@ -80,13 +87,52 @@ To start neatplan as a runit service:
 ln -s /etc/sv/neatplan /var/service/
 ```
 
+## Usage
+
+Simply running `neatplan` will immediately set the network using default config (if present).
+
+### Dry-run
+
+If you would like to test your configuration before actually executing it, use the dry-run mode:
+
+```
+neatplan --dry-run
+```
+
+Neatplan will only print a parsed configuration, so you can verify it before execution.
+
+### Custom config path
+
+You can also point neatplan to a different config file using `--config` option:
+
+```
+neatplan --config /path/to/file.conf
+```
+
+### Help
+
+Run with `--help` to see this help message:
+
+```
+usage: neatplan [-h] [-c CONFIG] [-v] [--dry-run]
+
+nginx-style network configuration
+
+options:
+  -h, --help            show this help message and exit
+  -c CONFIG, --config CONFIG
+                        Config file absolute path
+  -v, --version         Show version and exit
+  --dry-run             Don't execute, only show what you've got
+```
+
 ## Configuration
 
 #### Config path
 
 `/etc/neatplan/default.conf`
 
-#### Simple example
+#### Quick example
 
 * IPv4 using DHCP
 * Static IPv6 address
@@ -114,6 +160,8 @@ network {
     }
 }
 ```
+
+Note that 
 
 #### Full feature showcase
 
@@ -158,6 +206,11 @@ network {
     }
 }
 ```
+
+Note that `dhcp6 { enable: false; }` isn't actually necessary. It's not being run by default if not enabled explicitly.
+
+Additionally, the ability to execute custom commands within the `before` and `after` contexts 
+can be used to run arbitrary code. Make sure only root has write access to the configuration.
 
 ## Writing init scripts
 
