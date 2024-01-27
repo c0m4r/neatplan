@@ -21,7 +21,7 @@ depend() {
 start() {
     ebegin "Starting neatplan"
     # Invoke neatplan script
-    if [ -d ${neatplan_venv} ]; then
+    if [ -e ${neatplan_venv} ]; then
         . ${neatplan_venv}
     fi
     $neatplan_script --config $neatplan_config >/dev/null
