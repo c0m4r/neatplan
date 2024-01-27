@@ -42,6 +42,9 @@ include = [
     "/neatplan",
     "/etc",
     "/CHANGELOG",
+    "deploy.sh",
+    "neatplan.sh",
+    "requirements.txt",
 ]
 
 [tool.hatch.build.targets.wheel]
