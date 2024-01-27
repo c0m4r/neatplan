@@ -171,7 +171,8 @@ network {
 * Handle Python venv before executing neatplan with `. /opt/neatplan/.venv/bin/activate`
   or set the `PATH=/opt/neatplan/.venv:$PATH`.
 
-See example [OpenRC](/etc/init.d/neatplan) and [runit](/etc/sv/neatplan/run) init scripts.
+See example [OpenRC](https://github.com/c0m4r/neatplan/blob/main/etc/init.d/neatplan) 
+and [runit](https://github.com/c0m4r/neatplan/blob/main/etc/sv/neatplan/run) init scripts.
 
 ## Documentation
 
