@@ -370,9 +370,9 @@ def parse_network_configuration(cfg: Whatever, dry_run: bool) -> None:
     Parse network configuration
     """
     for net in cfg:
-        if net["directive"] == "backend":
-            backend = net["args"][0]
-            print(f"Backend: {backend}")
+        # if net["directive"] == "backend":
+        #     backend = net["args"][0]
+        #     print(f"Backend: {backend}")
         if net["directive"] == "before":
             parse_custom(net["block"], dry_run)
         if net["directive"] == "firewall":
