@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 neatplan - nginx-like network configuration
 Copyright (C) 2024 c0m4r
@@ -27,45 +26,7 @@ from shutil import which
 from subprocess import run
 from typing import Any as Whatever
 
-# https://github.com/nginxinc/crossplane
-import crossplane
 import psutil
-
-
-__VERSION = "0.2.0"
-
-
-def read_args() -> argparse.Namespace:
-    """
-    Parse arguments
-    """
-    parser = argparse.ArgumentParser(
-        prog="neatplan",
-        description="nginx-style network configuration",
-        epilog="https://github.com/c0m4r/neatplan",
-    )
-
-    parser.add_argument(
-        "-c",
-        "--config",
-        help="Config file absolute path",
-        default="/etc/neatplan/default.conf",
-    )
-    parser.add_argument(
-        "-v",
-        "--version",
-        help="Show version and exit",
-        action="store_true",
-        default=False,
-    )
-    parser.add_argument(
-        "--dry-run",
-        help="Don't execute, only show what you've got",
-        action="store_true",
-        default=False,
-    )
-
-    return parser.parse_args()
 
 
 class Neatplan:
@@ -384,43 +345,3 @@ class Neatplan:
             if self.is_ip(nameserver):
                 print("nameserver", nameserver)
                 resolv_conf.write(f"nameserver {nameserver}\n")
-
-
-def main() -> None:
-    """
-    neatplan main
-    """
-
-    print("neatplan by c0m4r", f"v{__VERSION}")
-
-    # Read arguments
-    args = read_args()
-
-    if args.version:
-        sys.exit(0)
-    if args.dry_run:
-        print("Running dry-run mode")
-
-    # Initialize Neatplan
-    neatplan = Neatplan(args)
-
-    # Read config
-    config_json = crossplane.parse(args.config)
-
-    # Check for errors
-    neatplan.check_errors(config_json)
-
-    # Check init system
-    neatplan.check_init_system()
-
-    # Set lookpback device up
-    neatplan.iface_up("lo")
-
-    # Parse config
-    for cfg in config_json["config"][0]["parsed"]:
-        if cfg["directive"] == "network":
-            neatplan.parse_network_configuration(cfg["block"])
-
-
-if __name__ == "__main__":
-    main()

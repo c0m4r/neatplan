@@ -1,6 +1,10 @@
+[build-system]
+requires = ["hatchling>=1.21.1"]
+build-backend = "hatchling.build"
+
 [project]
 name = "neatplan"
-version = "0.2.0"
+version = "0.3.0-rc1"
 authors = [
   { name="c0m4r", email="github@wolfet.pl" },
 ]
@@ -29,3 +33,19 @@ neatplan = "neatplan:main"
 Homepage = "https://github.com/c0m4r/neatplan"
 Issues = "https://github.com/c0m4r/neatplan/issues"
 Changelog = "https://github.com/c0m4r/neatplan/blob/main/CHANGELOG"
+
+[tool.hatch.version]
+path = "neatplan/__init__.py"
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/bin",
+    "/neatplan",
+    "/etc",
+    "/CHANGELOG",
+]
+
+[tool.hatch.build.targets.wheel]
+include = [
+    "/neatplan/*",
+]

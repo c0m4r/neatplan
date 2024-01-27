@@ -5,7 +5,7 @@ SCRIPT_PATH=$(dirname "$SCRIPT")
 
 cd $SCRIPT_PATH
 
-VERSION=$(grep ^__VER neatplan.py | awk '{print $3}' | sed s/\"//g;)
+VERSION=$(grep ^__VER neatplan/__init__.py | awk '{print $3}' | sed s/\"//g;)
 echo "neatplan v${VERSION}"
 
 # ------------------------------------
