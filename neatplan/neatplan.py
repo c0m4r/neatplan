@@ -23,7 +23,7 @@ import os
 import sys
 
 from shutil import which
-from subprocess import run
+from subprocess import run  # nosec
 from typing import Any as Whatever
 
 import psutil
@@ -107,7 +107,7 @@ class Neatplan:
         command = [self.which_ip(), "link", "set", iface, "up"]
 
         if not self.args.dry_run:
-            run(command, check=True)
+            run(command, check=True)  # nosec
             with open("/run/neatplan", "a+", encoding="utf-8") as neatplan_run:
                 neatplan_run.write(f"{iface}\n")
         else:
@@ -125,7 +125,7 @@ class Neatplan:
         if self.is_ipv4(ip):
             command = [self.which_ip(), "address", "add", ip, "dev", iface]
 
-        run(command, check=False)
+        run(command, check=False)  # nosec
 
     def set_route(self, route: str, iface: str) -> None:
         """
@@ -189,19 +189,19 @@ class Neatplan:
 
         if self.is_ipv6(route[0]):
             if default6_command:
-                run(default6_command, check=False)
+                run(default6_command, check=False)  # nosec
             elif via6_command:
-                run(via6_command, check=False)
+                run(via6_command, check=False)  # nosec
             else:
-                run(command6, check=False)
+                run(command6, check=False)  # nosec
 
         if self.is_ipv4(route[0]):
             if default_command:
-                run(default_command, check=False)
+                run(default_command, check=False)  # nosec
             if via_command:
-                run(via_command, check=False)
+                run(via_command, check=False)  # nosec
             else:
-                run(command, check=False)
+                run(command, check=False)  # nosec
 
     def parse_addresses(self, addresses: Whatever, iface: str) -> None:
         """
@@ -261,7 +261,7 @@ class Neatplan:
                 continue
 
             if not self.args.dry_run:
-                run([command, rules], check=False)
+                run([command, rules], check=False)  # nosec
             else:
                 print("dry-run:", command, rules)
 
@@ -280,7 +280,7 @@ class Neatplan:
             command = [dhclient, "-1", iface]
 
         if not self.args.dry_run:
-            run(command, check=False)
+            run(command, check=False)  # nosec
         else:
             print("dry-run:", command)
 
