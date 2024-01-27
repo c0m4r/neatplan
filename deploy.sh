@@ -5,12 +5,20 @@ SCRIPT_PATH=$(dirname "$SCRIPT")
 
 cd $SCRIPT_PATH
 
-VERSION=$(grep ^__VER neatplan.py | awk '{print $3}' | sed s/\"//g;)
+VERSION=$(grep ^__VER neatplan/__init__.py | awk '{print $3}' | sed s/\"//g;)
 echo "neatplan v${VERSION}"
 
 # ------------------------------------
 # Functions
 # ------------------------------------
+
+custom_crossplane_hack() {
+    crossplane_path=$(dirname .venv/lib/python*/site-packages)
+    if [[ -d $crossplane_path ]]; then
+        touch ${crossplane_path}/site-packages/crossplane/py.typed
+        sed -i 's/parse(filename,/parse(filename: str,/g;' ${crossplane_path}/site-packages/crossplane/parser.py
+    fi
+}
 
 deploy_venv() {
     if [ ! -e .venv/bin/activate ]; then
@@ -18,6 +26,7 @@ deploy_venv() {
         python3 -m venv .venv
         . .venv/bin/activate
         pip3 install -r requirements.txt
+        custom_crossplane_hack
     else
         echo "Python venv already deployed"
     fi

@@ -12,4 +12,4 @@ if [ ! -d .venv ] && [ -x deploy.sh ]; then
 fi
 
 . .venv/bin/activate
-./neatplan.py "$@"
+python3 -m neatplan "$@"

@@ -1,5 +1,6 @@
 .okrutnik_venv/
 .venv/
 dist/
+neatplan/__pycache__/
 neatplan.egg-info/
 okrutnik.sh
