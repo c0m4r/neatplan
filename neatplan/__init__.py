@@ -24,7 +24,7 @@ import crossplane
 
 from .neatplan import Neatplan
 
-__VERSION = "0.3.0-rc2"
+__VERSION = "0.3.0"
 
 
 def read_args() -> argparse.Namespace:

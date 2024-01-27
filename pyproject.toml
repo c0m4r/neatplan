@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "neatplan"
-version = "0.3.0-rc2"
+version = "0.3.0"
 authors = [
   { name="c0m4r", email="github@wolfet.pl" },
 ]
