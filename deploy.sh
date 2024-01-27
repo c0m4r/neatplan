@@ -37,6 +37,17 @@ deploy_venv() {
     fi
 }
 
+deploy_bin() {
+    neatplan_target_bin="/usr/local/bin/neatplan"
+    if [ ! -x $neatplan_target_bin ]; then
+        echo "Creating symlink: ${neatplan_target_bin}"
+        ln -s ${SCRIPT_PATH}/neatplan.sh $neatplan_target_bin
+        chmod u+x $neatplan_target_bin
+    else
+        echo "${neatplan_target_bin} already exists"
+    fi
+}
+
 deploy_config() {
     if [ ! -e /etc/neatplan/default.conf ]; then
         echo "Deploying default config"
@@ -76,6 +87,7 @@ deploy_init() {
 # ------------------------------------
 
 deploy_venv
+deploy_bin
 deploy_config
 deploy_init
 
