@@ -24,7 +24,7 @@ import crossplane
 
 from .neatplan import Neatplan
 
-__VERSION = "0.3.0-rc1"
+__VERSION = "0.3.0-rc2"
 
 
 def read_args() -> argparse.Namespace:
@@ -83,9 +83,6 @@ def main() -> None:
 
     # Check for errors
     neatplan.check_errors(config_json)
-
-    # Check init system
-    neatplan.check_init_system()
 
     # Set lookpback device up
     neatplan.iface_up("lo")

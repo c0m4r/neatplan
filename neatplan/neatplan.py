@@ -26,8 +26,6 @@ from shutil import which
 from subprocess import run  # nosec
 from typing import Any as Whatever
 
-import psutil
-
 
 class Neatplan:
     """
@@ -36,15 +34,6 @@ class Neatplan:
 
     def __init__(self, args: argparse.Namespace) -> None:
         self.args = args
-
-    def check_init_system(self) -> None:
-        """
-        pest control
-        """
-        init_name = psutil.Process(1).name()
-        if init_name == "systemd":
-            print("systemd detected, this program will self-destruct now")
-            print("just kidding, but seriously: ZnVjayBzeXN0ZW1k")
 
     def check_errors(self, config_json: Whatever) -> None:
         """

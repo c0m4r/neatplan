@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "neatplan"
-version = "0.3.0-rc1"
+version = "0.3.0-rc2"
 authors = [
   { name="c0m4r", email="github@wolfet.pl" },
 ]
@@ -22,7 +22,6 @@ classifiers = [
     "Topic :: System :: Operating System",
 ]
 dependencies = [
-  "psutil>=5.9.8",
   "crossplane>=0.5.8",
 ]
 
