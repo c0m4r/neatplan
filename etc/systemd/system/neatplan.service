@@ -7,11 +7,11 @@ Before=network.target shutdown.target network-online.target
 Conflicts=shutdown.target
 
 [Service]
-Type=simple
+Type=oneshot
 User=root
 WorkingDirectory=/opt/neatplan
 ExecStart=/opt/neatplan/neatplan.sh
-Restart=always
+ExecStartPost=/opt/neatplan/tentatives.sh
 RemainAfterExit=true
 TimeoutStartSec=30sec
 
