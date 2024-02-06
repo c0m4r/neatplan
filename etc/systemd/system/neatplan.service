@@ -1,0 +1,20 @@
+[Unit]
+Description=neatplan: nginx-style network configuration
+DefaultDependencies=no
+Wants=network.target ifupdown-pre.service
+After=local-fs.target network-pre.target apparmor.service systemd-sysctl.service systemd-modules-load.service ifupdown-pre.service
+Before=network.target shutdown.target network-online.target
+Conflicts=shutdown.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/neatplan
+ExecStart=/opt/neatplan/neatplan.sh
+Restart=always
+RemainAfterExit=true
+TimeoutStartSec=30sec
+
+[Install]
+WantedBy=multi-user.target
+WantedBy=network-online.target
